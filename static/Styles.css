@@ -1,0 +1,118 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f7f9fc;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    color: #444;
+    font-size: 40px;
+    margin-bottom: 20px;
+}
+
+form {
+    background-color: #fff;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #555;
+}
+
+input[type="radio"], input[type="checkbox"] {
+    margin-right: 10px;
+    margin-top: 10px;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 12px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+button {
+    background-color: #0069d9;
+    color: #fff;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #0053b3;
+}
+
+.warning {
+    color: #e74c3c;
+    font-size: 0.9em;
+    margin-top: 5px;
+}
+
+.description {
+    font-size: 0.85em;
+    color: #7f8c8d;
+    margin-top: 5px;
+}
+
+.active {
+    background-color: #0069d9;
+    color: white;
+}
+
+.inactive {
+    background-color: #e9ecef;
+    color: #6c757d;
+}
+
+.disabled {
+    background-color: #e9ecef;
+    color: #6c757d;
+    cursor: not-allowed;
+}
+
+.enabled {
+    background-color: white;
+    color: black;
+}
+
+.hidden {
+    display: none;
+}
+
+.advanced-settings-button {
+    background-color: #f0f0f0;
+    border: 1px solid #bdbdbd;
+    color: #444;
+    padding: 12px 15px;
+    font-size: 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: inline-block;
+    width: 100%;
+    text-align: left;
+    margin-bottom: 25px;
+    transition: background-color 0.3s ease;
+}
+
+.advanced-settings-button:hover {
+    background-color: #e0e0e0;
+}

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkbox Input Form</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='Styles.css') }}">
+</head>
+<body>
+    <script src="{{ url_for('static', filename='Script.js') }}"></script>
+    <h1>PAARM Report Settings</h1>
+    <p>
+        <a href="{{ url_for('static', filename='Instructions.docx') }}" target="_blank">View Project Instructions</a>
+    </p>
+    <form id="settingsForm" onsubmit="submitForm(event)">
+        <input type="hidden" id="long_term" name="long_term" value="false">
+        <div>
+            <button type="button" id="shortTermButton" onclick="setTerm('short')">Short Term</button>
+            <button type="button" id="longTermButton" onclick="setTerm('long')">Long Term</button>
+        </div>
+
+        <div class="form-group">
+            <label>Backtest into the past or extrapolate to the future</label>
+            <input type="radio" id="bool1" name="isFuture" value="False"> Backtest
+            <div class="description">Backtest: Will train a model up until the month(s) you select on historical data. It will then make predictions up until the current month and evaluate the model accuracy using mean average percentage error. 
+                (Warning: make sure the month(s) you pick are in the PAST give your model enough data to properly train.)</div>
+            <input type="radio" id="bool1" name="isFuture" value="True" checked> Extrapolate
+            <div class="description">Extrapolate: Will forecast into the future using future seats and exogenous data. The model will then make predictions up until the month(s) selected.
+                 (Warning: make sure all month(s) are in the FUTURE and you have values for your exogenous variables + seats for as long into the future as you are trying to predict).</div>
+        </div>
+
+        <div id="timeInputsContainer">
+            <div class="timeInputWrapper">
+                <div id="monthInput" class="timeInput" style="display: none;">
+                    <label for="month">Month:</label>
+                    <input type="month" name="month[]">
+                </div>
+                <div id="yearInput" class="timeInput" style="display: none;">
+                        <!-- Options will be populated by JavaScript -->
+                    </select>
+                </div>
+            </div>
+        </div>
+    
+        <button type="button" id="addMonthButton" class="hidden" onclick="addMonthInput()">Add Month Input</button>
+       <button type="button" id="addYearButton" class="hidden" onclick="addYearInput()" style="display: none;">Add Year Input</button>
+        <div class="description">For extrapolating, this is what month or year the model should make predictions up to (must be in the future). 
+            For backtesting, this is what month or year the training-testing split should occur (must be in the past).
+        </div>
+        <div class="form-group">
+            <label>
+                <input type="checkbox" id="bool2" name="opt_pes" value="True"> Include Optimistic+Pessimistic Predictions
+            </label>
+            <div class="description">Will include a set of predicted optimistic and pessimistic passenger values in the report. (Optimistic = Mean + 1 Standard Dev, Pessimistic = Mean - 1 Standard Dev).</div>
+        </div>
+        
+        <div class="form-group">
+            <label>
+                <input type="checkbox" id="bool3" name="matplot_graphs" value="True"> Include Matplotlib Graphs
+            </label>
+            <div class="description">Will include a set of exported PNG graphs of the model's predictions using Matplotlib in Python.</div>
+        </div>
+        
+        <div class="form-group">
+            <label>
+                <input type="checkbox" id="bool4" name="model_params" value="True"> Export Model Parameters
+            </label>
+            <div class="description">Will include a set of text files that display model parameters and evaluates the correlation.</div>
+        </div>
+        
+        <div class="form-group">
+            <label>
+                <input type="checkbox" id="bool5" name="GDP" value="True"> Include GDP as exogenous variable
+            </label>
+            <div class="description">Will include Real GDP values as an exogenous variable of the model.</div>
+        </div>
+
+        <div class="form-group">
+            <label>
+                <input type="checkbox" id="bool7" name="divide by airline" value="True"> Divide by Airline
+            </label>
+            <div class="description">Do you wish to divide your data by airline 
+                in addition to airport and international/domestic.</div>
+        </div>
+
+        <div class="form-group">
+            <label for="report_name">Report Name:</label>
+            <input type="text" id="report_name" name="report_name">
+            <div class="warning">Warning: Ensure the report name is unique and does not match an existing report in your reports folder. 
+                Avoid special (non-alphanumeric) characters in your report name.</div>
+        </div>
+        
+
+       <div class="form-group">
+        <label>Modeling:</label>
+        <button id="sarimaxButton" onclick="toggleView('sarimax'); return false;" class="active">SARIMAX</button>
+        <button id="deepLearningButton" onclick="toggleView('deepLearning'); return false;" class="inactive">Deep Learning</button>
+        <div id="sarimaxSection">
+            <input type="hidden" name="deepLearner" id="deepLearner" value="False">
+            <label>Select Models for Ensemble:</label>
+            <span class="description">SARIMAX models (where seasonal_order = (order, 12)) are used for Short Term Predictions 
+            and ARIMAX models are used for Long Term Predictions.</span>
+            <div>
+                <input type="checkbox" name="models" value="mod1"> (S)ARIMAX: Order = (1, 1, 1)
+                <input type="number" name="weight_mod1" value="1" min="1">
+                <span class="description">Weight of the model in the ensemble (default is 1).</span>
+            </div>
+            <div>
+                <input type="checkbox" name="models" value="mod2">  (S)ARIMAX: Order = (0, 1, 1)
+                <input type="number" name="weight_mod2" value="1" min="1">
+                <span class="description">Weight of the model in the ensemble (default is 1).</span>
+            </div>
+            <div>
+                <input type="checkbox" name="models" value="mod3"> (S)ARIMAX: Order = (0, 1, 0)
+                <input type="number" name="weight_mod3" value="1" min="1">
+                <span class="description">Weight of the model in the ensemble (default is 1).</span>
+            </div>
+            <div>
+                <input type="checkbox" name="models" value="mod4"> (S)ARIMAX: Order = (1, 1, 0)
+                <input type="number" name="weight_mod4" value="1" min="1">
+                <span class="description">Weight of the model in the ensemble (default is 1).</span>
+            </div>
+            <div>
+                <input type="checkbox" name="models" value="mod5"> (S)ARIMAX: Order = (2, 1, 1)
+                <input type="number" name="weight_mod5" value="1" min="1">
+                <span class="description">Weight of the model in the ensemble (default is 1).</span>
+            </div>
+            <div>
+                <input type="checkbox" name="models" value="mod6"> (S)ARIMAX: Order = (1, 1, 2)
+                <input type="number" name="weight_mod6" value="1" min="1">
+                <span class="description">Weight of the model in the ensemble (default is 1).</span>
+            </div>
+        </div>
+        <div id="deepLearningSection" class="hidden">
+            <input type="hidden" name="deepLearner" id="deepLearner" value="True">
+            <span class="warning">Deep learning predictions are not available for long term modeling.</span>
+            <!-- New inputs for Deep Learning configuration -->
+            <div>
+                <label for="numLayers">Number of Layers:</label>
+                <input type="number" id="numLayers" name="numLayers" min="1" max = "10" value="1">
+                <span class="warning">Warning: Adding too many layers could cause report to take several minutes to run.</span>
+            </div>
+            <div>
+                <label for="neuronsPerLayer">Neurons per Layer:</label>
+                <input type="number" id="neuronsPerLayer" name="neuronsPerLayer" min="8" max = "64" value="8">
+                <span class="warning">Warning: Adding too many neurons could cause report to take several minutes to run.</span>
+            </div>
+            <div>
+                <label for="epochs">Epochs (# of training intervals):</label>
+                <input type="number" id="epochs" name="epochs" min="16" max = "2048" value="100">
+                <span class="warning">Warning: Settings epochs too high could cause report to take several minutes to run.</span>
+            </div>
+        </div>
+    </div>
+
+        <div class="form-group">
+            <label>Select Airport:</label>
+            <div>
+                <input type="checkbox" id="allAirports" name="airports" value="all" checked onclick="toggleAirports()"> All
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 2px;">
+                <label style="font-weight: normal;">
+                    <input type="checkbox" class="airport-checkbox" name="airports" value="EWR" checked disabled>
+                    EWR
+                </label>
+                <label style="font-weight: normal;">
+                    <input type="checkbox" class="airport-checkbox" name="airports" value="JFK" checked disabled>
+                    JFK
+                </label>
+                <label style="font-weight: normal;">
+                    <input type="checkbox" class="airport-checkbox" name="airports" value="LGA" checked disabled>
+                    LGA
+                </label>
+                <label style="font-weight: normal;">
+                    <input type="checkbox" class="airport-checkbox" name="airports" value="SWF" checked disabled>
+                    SWF
+                </label>
+                <label style="font-weight: normal;">
+                    <input type="checkbox" class="airport-checkbox" name="airports" value="Subtotal" checked disabled>
+                    Subtotal
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Select DOM/INT:</label>
+            <div>
+                <input type="checkbox" id="both" name="domint" value="both" checked onclick="toggleDomInt()"> Both
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 2px;">
+                <label style="font-weight: normal;">
+                    <input type="checkbox" class="domint-checkbox" name="domint" value="Domestic" checked disabled>
+                    DOM
+                </label>
+                <label style="font-weight: normal;">
+                    <input type="checkbox" class="domint-checkbox" name="domint" value="International" checked disabled>
+                    INT
+                </label>
+                <label style="font-weight: normal;">
+                    <input type="checkbox" class="domint-checkbox" name="domint" value="Subtotal" checked disabled>
+                    Subtotal
+                </label>
+            </div>
+        </div>
+        
+      <div class="advanced-settings">
+            <button type="button" class="advanced-settings-button" onclick="toggleAdvancedSettings()">Advanced Settings ▼</button>
+            <div id="advanced-settings-content" style="display: none;">
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="includeCovid" name="Covid" value="True" onclick="toggleCovidFields()"> Include Covid Dummy as exogenous variable
+                    </label>
+                    <div class="description">Will include a binary dummy variable as an exogenous variable of the model.</div>
+                </div>
+                <label for="covidStart">COVID Dummy Start:</label>
+                <input type="month" id="covidStart" name="covidStart" class="disabled-input" disabled>
+                <div class="description">Defines the start date of where covid dummy variable should be set to one.
+                    (Warning: Start must be 2020 or after and start must be before selected end point.)
+                </div>
+
+                <label for="covidEnd">COVID Dummy End:</label>
+                <input type="month" id="covidEnd" name="covidEnd" class="disabled-input" disabled>
+                <div class="description">Defines the end date of where covid dummy variable should be set to one.
+                    (Warning: End must be in the past or after and end must be after selected start point.)
+                </div>
+                <div class="warning">Start and end points will be rounded to nearest year for long term modeling.</div>
+            </div>
+        </div>
+            
+              
+      <button type="submit">Submit</button>
+    </form>
+    <p id="status"></p>
+    
+</body>
+</html>
