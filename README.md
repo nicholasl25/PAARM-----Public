@@ -2,7 +2,15 @@
 
 The purpose of this project is to assist the AVI Forecasting team in their efforts to predict airport passenger volumes at the Port Authority through customizable report generation. NOTE THESE INSTRUCTIONS ARE FOR PORT AUTHORITY EMPLOYEES ONLY. IF YOU ARE NOT A PORT AUTHORITY EMPLOYEE (or using public repository) FOLLOWING THESE INSTRUCTIONS MAY RESULT IN AN ERROR.
 
-#### IMPORTANT: THIS IS ONLY THE PUBLIC VERSION OF THE FULL REPOSITORY AND THEREFORE SOME FILES MAY BE MISSING INCLUDING, "Monthly Pax.csv", "Monthly Seats.csv", "Monthly Economic.csv", "Yearly Pax.csv", "Yearly Economic.csv", "Short Term Data.xslx", "Long Term Data.xslx", and the /Images folder.
+#### IMPORTANT THIS IS ONLY THE PUBLIC VERSION OF THE FULL REPOSITORY AND THEREFORE SOME FILES MAY BE MISSING INCLUDING: 
+- Monthly Pax.csv
+- Monthly Seats.csv
+- Monthly Economic.csv
+- Yearly Pax.csv
+- Yearly Economic.csv
+- Short Term Data.xslx
+- Long Term Data.xslx
+- /Images folder.
 
 ## Capabilities
 
