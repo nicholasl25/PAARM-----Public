@@ -1,6 +1,8 @@
 # Port Authority Automatic Report Maker (PAARM) by Nicholas Lombardo
 
-The purpose of this project is to assist the AVI Forecasting team in their efforts to predict airport passenger volumes at the Port Authority through customizable report generation. NOTE THESE INSTRUCTIONS ARE FOR PORT AUTHORITY EMPLOYEES ONLY. IF YOU ARE NOT A PORT AUTHORITY EMPLOYEE FOLLOWING THESE INSTRUCTIONS MAY RESULT IN AN ERROR.
+The purpose of this project is to assist the AVI Forecasting team in their efforts to predict airport passenger volumes at the Port Authority through customizable report generation. NOTE THESE INSTRUCTIONS ARE FOR PORT AUTHORITY EMPLOYEES ONLY. IF YOU ARE NOT A PORT AUTHORITY EMPLOYEE (or using public repository) FOLLOWING THESE INSTRUCTIONS MAY RESULT IN AN ERROR.
+
+#### IMPORTANT: THIS IS ONLY THE PUBLIC VERSION OF THE FULL REPOSITORY AND THEREFORE SOME FILES MAY BE MISSING INCLUDING, "Monthly Pax.csv", "Monthly Seats.csv", "Monthly Economic.csv", "Yearly Pax.csv", "Yearly Economic.csv", "Short Term Data.xslx", "Long Term Data.xslx", and the /Images folder.
 
 ## Capabilities
 
@@ -147,5 +149,4 @@ This get_everything function is the function that actually generates everything 
 - __.export_model_params():__ These functions are optionally called and responsible for exporting the model parameters as a text file. _Their definitions could be found in Classes/Past.py and Classes/Future.py_
 - __.get_date():__ These functions contain the logic deciding how "time" variables should be converted into a date. These functions are different between classes and predictions are made on a yearly basis in the long term and on a monthly basis in the short.
 - _To see the specific implementation of the Predictor methods see the documentation in the code of Classes/Past.py and Classes/Future.py as well as in Classes/LongPast.py, Classes/LongFuture.py, Classes/DeepLearnerPast.py and Classes/DeepLearnerFuture.py._
-#   P A A R M - - - - - P u b l i c  
  
